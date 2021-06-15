@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Создание нового поста</h1>
-    <form method="post" enctype="multipart/form-data">
+    <h1>Editing Post</h1>
+    <form method="post" class="post-form" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="container">{{ form.as_p }}</div>
-        <button type="submit">Создать</button>
-    </form>
+        <div class="container">{{ form.as_p }}
+        <button type="submit">Save</button>
+        </div>
+
+        </form>
 {% endblock %}

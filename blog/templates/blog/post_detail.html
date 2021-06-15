@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
         <article class="media content-section">
+
           <div class="media-body">
             <div class="article-metadata">
               <a class="mr-2" href="#">{{ post.author }}</a>
@@ -16,8 +17,12 @@
             {% if post.image %}
             <img src="{{ post.image.url }}" alt="...">
             {% endif %}
-
+          <div class="MyButtons">
+          <a href="{% url 'edit-post' post.id %}"><button>Edit</button></a>
+          <a href="{% url 'delete-post' post.id %}"><button>Delete</button></a>
+          </div>
         </article>
+
 {% endblock content %}
 
 
