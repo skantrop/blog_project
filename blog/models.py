@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-
+from django.urls import reverse
 
 User = get_user_model()
 
@@ -26,7 +26,6 @@ class Post(models.Model):
         ('published', 'Опубликован'),
         ('draft', 'Черновик')
     )
-
     title = models.CharField(max_length=100)
     text = models.TextField()
     author = models.ForeignKey(User,
@@ -44,6 +43,8 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('post-detail', kwargs={'pk': self.pk})
 
 
 

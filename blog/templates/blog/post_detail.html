@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ post.author }}</a>
+              <small class="text-muted">{{ post.pub_date }}</small>
+            </div>
+            <h2><a class="article-title" href="#">{{ post.title }}</a></h2></div>
+            <p class="article-content">{{ post.text }}</p>
+            {% if post.video %}
+            <video class="embed-responsive-16by9"  id="video-style" controls="controls" style="width: 550px; height: 500px;">
+                <source src="{{ post.video.url }}" type="video/mp4" />
+            </video>
+            {% endif %}
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="...">
+            {% endif %}
+
+        </article>
+{% endblock content %}
+
+

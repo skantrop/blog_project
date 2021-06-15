@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<div class="container">
+{% extends "base.html" %}
+{% block content %}
     {% for post in posts %}
-    <h3 class="text-center mt-2 mb-2">{{ post.title }}</h3>
-    <video class="embed-responsive-16by9" controls="controls" style="width: 500px; height: 700px;">
-        <source src="{{ post.video.url }}" type="video/mp4" />
-    </video>
-    <img src="{{ post.image.url }}" alt="hihihi">
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ post.author }}</a>
+              <small class="text-muted">{{ post.pub_date }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2></div>
+            <p class="article-content">{{ post.text|truncatewords:10 }}</p>
+        </article>
     {% endfor %}
-    </div>
-</body>
-</html>
+{% endblock content %}
+
+
