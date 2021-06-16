@@ -17,7 +17,6 @@ class SignInView(LoginView):
     template_name = 'login.html'
     success_url = reverse_lazy('index-page')
 
-class ProfileView(DetailView):
-    model = User
-    template_name = 'profile.html'
+def profile(request):
+    return render(request, 'profile.html')
 

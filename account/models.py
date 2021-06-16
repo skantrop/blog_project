@@ -10,3 +10,8 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.get_full_name()
+
+    def get_image_url(self):
+        if self.image:
+            return self.image.url
+        return ''

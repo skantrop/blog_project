@@ -44,13 +44,14 @@
                 <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
                 {% else %}
                 <div class="dropdown show">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown link
+                        <img src="{{ request.user.get_image_url }}" style="height:25px; width:25px; border-radius: 50%;">
+                        {{ request.user.username }}
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="#">Account</a>
+                        <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
                         <a class="dropdown-item" href="#">Another action</a>
                         <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
                     </div>

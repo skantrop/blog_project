@@ -13,7 +13,6 @@ class IndexPageView(View):
         posts = Post.objects.all()
         return render(request, 'blog/index.html', {'posts': posts})
 
-
 class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
