@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django import forms
 
-from .models import Post
+from .models import Post, Comment
 
 
 class CreatePostForm(forms.ModelForm):
@@ -17,5 +17,12 @@ class UpdatePostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'text', 'image', 'video', 'category', 'tags']
+
+
+class CommentForm(forms.ModelForm):
+     class Meta:
+        model = Comment
+        fields = ('content', )
+
 
 

@@ -23,6 +23,46 @@
           </div>
         </article>
 
-{% endblock content %}
+    {{ post.total_likes }} Like{{ total_likes|pluralize}}
 
+    {% if request.user.is_authenticated %}
+    <form action="{% url 'like_post' %}" method="post">
+        {% csrf_token %}
+        {% if is_liked %}
+        <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-danger" >Dislike</button>
+        {% else %}
+         <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary" >Like</button>
+        {% endif %}
+    </form>
+    {% endif %}
+<br/><br/>
+<hr>
+
+<form method="post">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" value="Submit" class="btn btn-outline-success">
+</form>
+
+
+
+<div class="main-comment-section">
+    {{ comments.count }} Comment{{ comments|pluralize }}
+    {% for comment in comments %}
+       <blockquote>
+  <blockquote class="blockquote">
+    <p class="mb-0">{{ comment.content}}</p>
+  </blockquote>
+   <footer class="blockquote-footer">by<cite title="Source Title">{{ comment.user|capfirst }}</cite>
+  </footer>
+</blockquote>
+    {% endfor %}
+</div>
+
+
+
+
+
+
+{% endblock %}
 
