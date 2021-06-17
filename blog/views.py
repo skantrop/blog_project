@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
@@ -46,7 +47,7 @@ class EditPostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return False
 
 
-class DeletePostView(DeleteView):
+class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     queryset = Post.objects.all()
     template_name = 'blog/delete_post.html'
 
@@ -54,3 +55,12 @@ class DeletePostView(DeleteView):
         return reverse('index-page')
 
 
+class SearchResultsView(View):
+    def get(self, request):
+        q = request.GET.get('q', '')
+        if q:
+            posts = Post.objects.filter(Q(title__icontains=q)|
+                                       Q(text__icontains=q))
+        else:
+            posts = Post.objects.none()
+        return render(request, 'blog/index.html', {'posts': posts})

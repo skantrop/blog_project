@@ -34,11 +34,12 @@
 
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-            <div class="input-group" style="width:400px;">
-              <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-                aria-describedby="search-addon" />
-              <button type="button" class="btn btn-outline-primary">search</button>
-            </div>
+                    <form role="search" method="get"  class="s-header__search-form" action="{% url 'search-results' %}">
+                        <label>
+                            <input  class="s-header__search-field" placeholder="Search" value="" name="q" title="Search" autocomplete="off"/>
+                        </label>
+                        <input type="submit" class="s-header__search-submit" value="Search">
+                    </form>
                 {% if not request.user.is_authenticated %}
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                 <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
