@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load bootstrap %}
 {% block content %}
 <h1>Sign up</h1>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form|bootstrap }}
     <button type="submit">Sign Up</button>
 </form>
 {% endblock %}

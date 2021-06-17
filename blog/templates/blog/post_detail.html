@@ -17,10 +17,12 @@
             {% if post.image %}
             <img src="{{ post.image.url }}" alt="...">
             {% endif %}
+          {% if request.user == post.author %}
           <div class="MyButtons">
           <a href="{% url 'edit-post' post.id %}"><button>Edit</button></a>
           <a href="{% url 'delete-post' post.id %}"><button>Delete</button></a>
           </div>
+          {% endif %}
         </article>
 
 {% endblock content %}

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     #myapps
     'ckeditor',
     'django_filters',
+    'bootstrapform',
     'blog',
     'account',
 ]

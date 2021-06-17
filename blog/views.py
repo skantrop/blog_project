@@ -3,8 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
-from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
-
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, ListView
 from .forms import CreatePostForm, UpdatePostForm
 from .models import Post
 
@@ -54,6 +53,12 @@ class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         return reverse('index-page')
 
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
+
 
 class SearchResultsView(View):
     def get(self, request):
@@ -64,3 +69,5 @@ class SearchResultsView(View):
         else:
             posts = Post.objects.none()
         return render(request, 'blog/index.html', {'posts': posts})
+
+

@@ -10,12 +10,14 @@ class RegisterView(CreateView):
     model = User
     template_name = 'registration.html'
     form_class = RegistrationForm
-    success_url = reverse_lazy('index-page')
+    success_url = reverse_lazy('login')
     success_message = 'success registered'
+
 
 class SignInView(LoginView):
     template_name = 'login.html'
     success_url = reverse_lazy('index-page')
+
 
 class ProfileView(DetailView):
     model = User
