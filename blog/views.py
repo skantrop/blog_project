@@ -1,11 +1,15 @@
+from urllib.request import Request
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
-from django.shortcuts import render
+from django.http import request
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, ListView
-from .forms import CreatePostForm, UpdatePostForm
-from .models import Post
+from .forms import CreatePostForm, UpdatePostForm, CommentForm
+from .models import Post, Comment
 
 
 class IndexPageView(View):
@@ -17,7 +21,27 @@ class IndexPageView(View):
 class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
-    context_object_name = 'post'
+    form = CommentForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['comments'] = Comment.objects.all()
+        context['form'] = self.form
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.request = Request.objects.get(pk=self.object.pk)
+        form.instance.created = timezone.now
+        form.save()
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -58,6 +82,12 @@ class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
+
+
+class CommentView(DetailView):
+    model = Comment
+    template_name = 'blog/post_detail.html'
+    form_class = CommentForm
 
 
 class SearchResultsView(View):

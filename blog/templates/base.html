@@ -23,7 +23,6 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-            <div><i class="fad fa-certificate"></i></div>
           <a class="navbar-brand mr-4" href="{% url 'index-page' %}">Blog</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -71,10 +70,11 @@
         </div>
         <div class="col-md-4">
           <div class="content-section">
-            <h3>Our Sidebar</h3>
-            <p class='text-muted'>You can put any information here you'd like.
+            <h3>Actions</h3>
               <ul class="list-group">
+              {%if request.user.is_authenticated%}
                 <li class="list-group-item list-group-item-light"><a href="{% url 'post-create'%}">Create my own post</a></li>
+              {% endif %}
                 <li class="list-group-item list-group-item-light">Favorite</li>
                 <li class="list-group-item list-group-item-light">Latest posts</li>
                 <li class="list-group-item list-group-item-light">Categories</li>

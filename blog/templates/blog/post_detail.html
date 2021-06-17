@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+{% load bootstrap %}
 {% block content %}
+
         <article class="media content-section">
 
           <div class="media-body">
@@ -24,7 +26,20 @@
           </div>
           {% endif %}
         </article>
+{% for comment in comments %}
+{% if comment.post == post %}
+<div class="container">
+  <div>{{ comment.author }}|{{ comment.pub_date }}</div>
+  <br>
+  <div>{{ comment.description }}</div>
+  <br>
+  <br>
+</div>
+{% endif  %}
+{% endfor %}
 
+<div>{{form|bootstrap}}</div>
+<button type="submit">Submit</button>
 {% endblock content %}
 
 

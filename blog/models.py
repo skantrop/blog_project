@@ -47,5 +47,15 @@ class Post(models.Model):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
 
+class Comment(models.Model):
+    description = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    pub_date = models.DateTimeField(auto_now_add=True, null=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ["-pub_date"]
+
+    def __str__(self):
+        return "{}".format(self.description)
 
