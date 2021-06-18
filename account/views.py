@@ -22,4 +22,5 @@ class SignInView(LoginView):
 class ProfileView(DetailView):
     model = User
     template_name = 'profile.html'
+    context_object_name = 'user'
 

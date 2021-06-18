@@ -46,13 +46,15 @@
                 <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
                 {% else %}
                 <div class="dropdown show">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    <a class="btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown link
+                        <img src="{{ request.user.image.url }}" style="width: 25px; height: 25px;" class="rounded-circle" alt=""  />
+                        {{ request.user.username }}
+
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="#">Account</a>
+                        <a class="dropdown-item" href="{% url 'profile' user.pk %}">Profile</a>
                         <a class="dropdown-item" href="#">Another action</a>
                         <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
                     </div>
@@ -68,6 +70,7 @@
         <div class="col-md-8">
           {% block content %}{% endblock %}
         </div>
+          {% if 'index-page' %}
         <div class="col-md-4">
           <div class="content-section">
             <h3>Actions</h3>
@@ -76,19 +79,20 @@
                 <li class="list-group-item list-group-item-light"><a href="{% url 'post-create'%}">Create my own post</a></li>
               {% endif %}
                 <li class="list-group-item list-group-item-light">Favorite</li>
-                <li class="list-group-item list-group-item-light">Latest posts</li>
+                  <li class="list-group-item list-group-item-light"><a href="{% url 'index-page' %}?filter=new">Latest posts</a></li>
                 <li class="list-group-item list-group-item-light">Categories</li>
               </ul>
             </p>
+              {%  endif %}
           </div>
         </div>
       </div>
     </main>
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 </body>
 </html>

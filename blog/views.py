@@ -1,3 +1,4 @@
+from datetime import timedelta
 from urllib.request import Request
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -8,14 +9,33 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, ListView
+from django.core.paginator import Paginator
 from .forms import CreatePostForm, UpdatePostForm, CommentForm
-from .models import Post, Comment
+from .models import Post, Comment, Category
+
 
 
 class IndexPageView(View):
+    context_object_name = 'posts'
+
     def get(self, request):
         posts = Post.objects.all()
-        return render(request, 'blog/index.html', {'posts': posts})
+        categories = Category.objects.all()
+        return render(request, 'blog/index.html', {'posts': posts, 'categories': categories})
+
+    def get_category(self, request, url):
+        posts = Post.objects.all(category__url=url)
+        categories = Category.objects.all()
+        return render(request, 'blog/index.html', {'posts': posts, 'categories': categories})
+
+    def det_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        filter = self.request.GET.get('q')
+        if filter:
+            start_date = timezone.now() - timedelta(days=1)
+            context['posts'] = Post.objects.filter(created__gte=start_date)
+        return context
+
 
 
 class PostDetailView(DetailView):
@@ -29,13 +49,15 @@ class PostDetailView(DetailView):
         context['form'] = self.form
         return context
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+    #def post(self, request, *args, **kwargs):
+        #self.object = self.get_object()
+        #form = CommentForm()
+        #if form.is_valid():
+        #    form.save()
+            #return self.form_valid(form)
+        #else:
+        #return CommentForm
+
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -99,5 +121,6 @@ class SearchResultsView(View):
         else:
             posts = Post.objects.none()
         return render(request, 'blog/index.html', {'posts': posts})
+
 
 

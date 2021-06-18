@@ -38,8 +38,10 @@
 {% endif  %}
 {% endfor %}
 
-<div>{{form|bootstrap}}</div>
-<button type="submit">Submit</button>
+<form method="post">
+  {% csrf_token %}
+  {{form|bootstrap}}
+<button type="submit">Submit</button></form>
 {% endblock content %}
 
 
