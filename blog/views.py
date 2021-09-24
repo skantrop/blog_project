@@ -5,14 +5,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.http import request
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, ListView
 from django.core.paginator import Paginator
-from .forms import CreatePostForm, UpdatePostForm, CommentForm
-from .models import Post, Comment, Category
-
+from .forms import CreatePostForm, UpdatePostForm, CommentForm, UpdateCommentForm
+from .models import Post, Comment, Category, Tag
 
 
 class IndexPageView(View):
@@ -37,33 +36,70 @@ class IndexPageView(View):
         return context
 
 
-
-class PostDetailView(DetailView):
+class PostDetailView(DetailView, LoginRequiredMixin):
     model = Post
     template_name = 'blog/post_detail.html'
+    context_object_name = 'post'
     form = CommentForm
+    pk_url_kwarg = "pk"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context['comments'] = Comment.objects.all()
+        context['comments'] = Comment.objects.filter(post=kwargs.get("object"))
         context['form'] = self.form
+        context['genres'] = Category.objects.all()
+        context['tags'] = Tag.objects.all()
         return context
 
-    #def post(self, request, *args, **kwargs):
-        #self.object = self.get_object()
-        #form = CommentForm()
-        #if form.is_valid():
-        #    form.save()
-            #return self.form_valid(form)
-        #else:
-        #return CommentForm
+    def post(self, request, *args, **kwargs):
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            description = form.cleaned_data['description']
+            author = self.request.user
+            post = self.get_object()
+            form.save(description, author, post)
+        else:
+            form = CommentForm
+        return redirect(self.request.get_full_path())
 
+
+class UpdateCommentView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    queryset = Comment.objects.all()
+    template_name = 'blog/edit_comment.html'
+    form_class = UpdateCommentForm
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.request = Request.objects.get(pk=self.object.pk)
-        form.instance.created = timezone.now
-        form.save()
+        return super().form_valid(form)
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == comment.author:
+            return True
+        return False
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        post = self.get_object()
+        return reverse('post-detail', args=(self.object.post.id, ))
+
+
+class DeleteCommentView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    queryset = Comment.objects.all()
+    template_name = 'blog/delete_comment.html'
+
+    def get_success_url(self):
+        post = self.get_object()
+        return reverse('post-detail', args=(self.object.post.id, ))
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == comment.author:
+            return True
+        return False
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -104,12 +140,6 @@ class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
-
-
-class CommentView(DetailView):
-    model = Comment
-    template_name = 'blog/post_detail.html'
-    form_class = CommentForm
 
 
 class SearchResultsView(View):

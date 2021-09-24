@@ -29,9 +29,13 @@
 {% for comment in comments %}
 {% if comment.post == post %}
 <div class="container">
-  <div>{{ comment.author }}|{{ comment.pub_date }}</div>
+  <div>{{ comment.author }}|{{ comment.pub_date }} </div>
   <br>
-  <div>{{ comment.description }}</div>
+  <div>{{ comment.description}}
+  {% if request.user == comment.author %}
+  <a href="{% url 'edit-comment' comment.id %}"><button type="submit">edit</button></a>
+  <a href="{% url 'delete-comment' comment.id %}"><button type="submit">delete</button></a>
+    {% endif %}
   <br>
   <br>
 </div>

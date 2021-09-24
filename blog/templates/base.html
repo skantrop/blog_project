@@ -78,9 +78,7 @@
               {%if request.user.is_authenticated%}
                 <li class="list-group-item list-group-item-light"><a href="{% url 'post-create'%}">Create my own post</a></li>
               {% endif %}
-                <li class="list-group-item list-group-item-light">Favorite</li>
                   <li class="list-group-item list-group-item-light"><a href="{% url 'index-page' %}?filter=new">Latest posts</a></li>
-                <li class="list-group-item list-group-item-light">Categories</li>
               </ul>
             </p>
               {%  endif %}

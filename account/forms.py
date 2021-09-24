@@ -1,6 +1,6 @@
 from django import forms
-
 from .models import User
+
 
 class RegistrationForm(forms.ModelForm):
     password = forms.CharField(min_length=8, required=True, widget=forms.PasswordInput)

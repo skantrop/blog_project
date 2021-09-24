@@ -13,4 +13,4 @@ class User(AbstractUser):
     image = models.ImageField(upload_to='users', blank=True, default= 'profile_images/default.png')
 
     def __str__(self):
-        return self.get_full_name()
+        return self.username

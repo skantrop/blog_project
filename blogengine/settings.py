@@ -77,7 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'blogengine.wsgi.application'
 
-
+AUTH_USER_MODEL = 'account.User'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
